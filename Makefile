@@ -4,7 +4,7 @@ LDFLAGS := -s -w
 
 all: env fmt build
 
-build: frps frpc
+build: frps frpc http
 
 env:
 	@go version
@@ -33,6 +33,9 @@ frps:
 
 frpc:
 	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -tags frpc -o bin/frpc ./cmd/frpc
+
+http:
+	env CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS) -X 'github.com/fatedier/frp/cmd/http/sub.defaultServerAddr=${FRPS_ADDR}' -X 'github.com/fatedier/frp/cmd/http/sub.defaultToken=${FRPS_TOKEN}'" -tags http -o bin/http ./cmd/http
 
 test: gotest
 
@@ -68,4 +71,5 @@ alltest: vet gotest e2e
 clean:
 	rm -f ./bin/frpc
 	rm -f ./bin/frps
+	rm -f ./bin/http
 	rm -rf ./lastversion
