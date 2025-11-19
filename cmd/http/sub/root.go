@@ -46,6 +46,8 @@ var (
 	name              string
 	localIP           string
 	localPort         int
+	httpUser          string
+	httpPassword      string
 	hostHeaderRewrite string
 
 	hostname string
@@ -68,6 +70,8 @@ func init() {
 	// HTTP specific flags
 	rootCmd.Flags().StringVarP(&localIP, "local_ip", "i", "127.0.0.1", "local IP")
 	rootCmd.Flags().IntVarP(&localPort, "local_port", "p", 80, "local port")
+	rootCmd.Flags().StringVarP(&httpUser, "http_user", "u", "", "http auth user")
+	rootCmd.Flags().StringVarP(&httpPassword, "http_pwd", "w", "", "http auth password")
 	rootCmd.Flags().StringVarP(&hostHeaderRewrite, "host_header_rewrite", "", "localhost", "host header rewrite")
 }
 
@@ -167,6 +171,8 @@ func createHTTPProxyFromFlags() []v1.ProxyConfigurer {
 			CustomDomains: []string{},
 			SubDomain:     name,
 		},
+		HTTPUser:          httpUser,
+		HTTPPassword:      httpPassword,
 		HostHeaderRewrite: hostHeaderRewrite,
 	}
 
